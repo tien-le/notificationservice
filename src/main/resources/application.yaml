@@ -1,0 +1,43 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: notificationservice
+  kafka:
+    bootstrap-servers: "localhost:29092,localhost:29093,localhost:29094"  # Kafka broker(s)
+#    producer:
+#      # key-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#
+#      # 0: no wait for kafka response
+#      # 1: leader write access, not wait for follower
+#      # -1: wait for all leader, and replication
+#      acks: -1
+#      retries: 1
+#      properties:
+#        enable.idempotence: true  # prevent duplicate sent
+#        max.in.flight.requests.per.connection: 5 # max requests in 1 connection
+    consumer:
+      group-id: notification-group                      # Consumer group ID
+      auto-offset-reset: earliest
+      # key-deserializer: "org.springframework.kafka.support.serializer.JsonDeserializer"
+      value-deserializer: "org.apache.kafka.common.serialization.ByteArrayDeserializer"
+      # enable-auto-commit: false               # (optional) manual ack
+
+  # Email server config
+  mail:
+    default-encoding: UTF-8
+    host: ${SMTP_HOST:smtp.gmail.com}
+    port: ${SMTP_PORT:587}
+    username: ${MAIL_ADDRESS:default@gmail.com}
+
+    # Create the app password with other (custom name)
+    # https://myaccount.google.com/u/1/apppasswords
+    password: ${MAIL_PASSWORD:empty12}
+
+    protocol: smtp
+    test-connection: false
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
